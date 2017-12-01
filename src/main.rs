@@ -1,11 +1,13 @@
 extern crate clap;
 extern crate env_logger;
+extern crate gdk;
 extern crate gtk;
 extern crate hidapi;
 extern crate inotify;
 #[macro_use]
 extern crate log;
 
+mod color;
 mod config;
 mod daemon;
 mod gui;

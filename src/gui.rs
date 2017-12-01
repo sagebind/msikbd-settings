@@ -1,3 +1,4 @@
+use color::Color;
 use config::Config;
 use gtk;
 use gtk::prelude::*;
@@ -24,6 +25,11 @@ pub fn main() {
     {
         let config = config.clone();
         let left_color: gtk::ColorButton = builder.get_object("left_color").unwrap();
+
+        if let Some(color) = config.get("color-left").ok().and_then(Color::from_hex) {
+            left_color.set_rgba(&color.into());
+        }
+
         left_color.connect_color_set(move |color| {
             let rgba = color.get_rgba();
             let color = hex_color(rgba.red, rgba.green, rgba.blue);
@@ -34,6 +40,11 @@ pub fn main() {
     {
         let config = config.clone();
         let center_color: gtk::ColorButton = builder.get_object("center_color").unwrap();
+
+        if let Some(color) = config.get("color-middle").ok().and_then(Color::from_hex) {
+            center_color.set_rgba(&color.into());
+        }
+
         center_color.connect_color_set(move |color| {
             let rgba = color.get_rgba();
             let color = hex_color(rgba.red, rgba.green, rgba.blue);
@@ -44,6 +55,11 @@ pub fn main() {
     {
         let config = config.clone();
         let right_color: gtk::ColorButton = builder.get_object("right_color").unwrap();
+
+        if let Some(color) = config.get("color-right").ok().and_then(Color::from_hex) {
+            right_color.set_rgba(&color.into());
+        }
+
         right_color.connect_color_set(move |color| {
             let rgba = color.get_rgba();
             let color = hex_color(rgba.red, rgba.green, rgba.blue);

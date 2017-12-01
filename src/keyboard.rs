@@ -1,3 +1,4 @@
+use color::Color;
 use config::Config;
 use hidapi::HidDevice;
 
@@ -24,7 +25,7 @@ pub fn set_config(device: &HidDevice, config: &Config) {
 pub fn set_brightness(device: &HidDevice) {}
 
 pub fn set_color(device: &HidDevice, region: &str, color: &str) {
-    let color = match parse_color(color.trim()) {
+    let color = match Color::from_hex(color.trim()) {
         Some(c) => c,
         None => {
             warn!("invalid color: {}", color);
@@ -85,16 +86,4 @@ fn send_feature_report(device: &HidDevice, buffer: &[u8]) {
     if let Err(e) = device.send_feature_report(buffer) {
         error!("error setting device feature: {}", e);
     }
-}
-
-fn parse_color(color: &str) -> Option<(u8, u8, u8)> {
-    if color.len() != 6 {
-        return None;
-    }
-
-    let red = u8::from_str_radix(&color[0..2], 16).ok()?;
-    let green = u8::from_str_radix(&color[2..4], 16).ok()?;
-    let blue = u8::from_str_radix(&color[4..6], 16).ok()?;
-
-    Some((red, green, blue))
 }
