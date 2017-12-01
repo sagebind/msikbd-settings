@@ -2,14 +2,14 @@ extern crate clap;
 extern crate env_logger;
 extern crate gtk;
 extern crate hidapi;
-extern crate libc;
+extern crate inotify;
 #[macro_use]
 extern crate log;
 
-mod api;
+mod config;
 mod daemon;
 mod gui;
-mod pipe;
+mod keyboard;
 
 use clap::*;
 use std::env;
@@ -40,11 +40,10 @@ fn main() {
             .help("Launch the GUI"))
         .get_matches();
 
-    if matches.is_present("gui") {
-        gui::main();
-    }
-
     if matches.is_present("daemonize") {
         daemon::main();
+        return;
     }
+
+    gui::main();
 }

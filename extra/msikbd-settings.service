@@ -1,0 +1,10 @@
+[Unit]
+Description=MSi keyboard settings daemon
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/msikbd-settings --daemon
+
+[Install]
+WantedBy=multi-user.target
+Alias=msikbd-settings.service

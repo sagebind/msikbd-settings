@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+TryExec=msikbd-settings
+Exec=msikbd-settings
+Icon=input-keyboard
+Terminal=false
+Categories=System;
+Name=MSi Keyboard Settings
+Comment=Settings for SteelSeries keyboard on MSi laptops
+StartupWMClass=msikbd-settings
