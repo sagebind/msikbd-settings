@@ -39,6 +39,7 @@ impl Config {
         let path = self.dir.join(key);
         let mut contents = String::new();
         File::open(path)?.read_to_string(&mut contents)?;
+        let contents = contents.trim().to_owned();
         Ok(contents)
     }
 

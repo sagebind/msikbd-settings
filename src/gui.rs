@@ -31,8 +31,7 @@ pub fn main() {
         }
 
         left_color.connect_color_set(move |color| {
-            let rgba = color.get_rgba();
-            let color = hex_color(rgba.red, rgba.green, rgba.blue);
+            let color = Color::from(color.get_rgba()).to_hex();
             config.set("color-left", &color);
         });
     }
@@ -46,8 +45,7 @@ pub fn main() {
         }
 
         center_color.connect_color_set(move |color| {
-            let rgba = color.get_rgba();
-            let color = hex_color(rgba.red, rgba.green, rgba.blue);
+            let color = Color::from(color.get_rgba()).to_hex();
             config.set("color-middle", &color);
         });
     }
@@ -61,14 +59,18 @@ pub fn main() {
         }
 
         right_color.connect_color_set(move |color| {
-            let rgba = color.get_rgba();
-            let color = hex_color(rgba.red, rgba.green, rgba.blue);
+            let color = Color::from(color.get_rgba()).to_hex();
             config.set("color-right", &color);
         });
     }
 
     {
         let mode_select: gtk::ComboBoxText = builder.get_object("mode_select").unwrap();
+
+        if let Ok(mode) = config.get("mode") {
+            mode_select.set_active_id(Some(mode.as_str()));
+        }
+
         mode_select.connect_changed(move |select| {
             if let Some(mode) = select.get_active_id() {
                 config.set("mode", &mode);
@@ -77,17 +79,4 @@ pub fn main() {
     }
 
     gtk::main();
-}
-
-fn hex_color(red: f64, green: f64, blue: f64) -> String {
-    format!(
-        "{:02x}{:02x}{:02x}",
-        color_f64_to_u8(red),
-        color_f64_to_u8(green),
-        color_f64_to_u8(blue),
-    )
-}
-
-fn color_f64_to_u8(color: f64) -> u8 {
-    (color * 255f64) as u8
 }
