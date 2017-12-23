@@ -1,24 +1,37 @@
 use color::Color;
-use config::Config;
-use hidapi::HidDevice;
+use config;
+use hidapi::*;
 
 
-pub const VENDOR_ID: u16 = 0x1770;
-pub const PRODUCT_ID: u16 = 0xff00;
+const VENDOR_ID: u16 = 0x1770;
+const PRODUCT_ID: u16 = 0xff00;
+
+lazy_static! {
+    static ref HIDAPI: HidApi = HidApi::new().unwrap();
+}
 
 
-pub fn set_config(device: &HidDevice, config: &Config) {
-    if let Ok(mode) = config.get("mode") {
-        set_mode(device, &mode);
+/// Apply the current configuration to the device.
+pub fn apply_config() {
+    let device = match HIDAPI.open(VENDOR_ID, PRODUCT_ID) {
+        Ok(d) => d,
+        Err(e) => {
+            error!("keyboard not found: {}", e);
+            return;
+        },
+    };
+
+    if let Ok(mode) = config::get("mode") {
+        set_mode(&device, &mode);
     }
-    if let Ok(color) = config.get("color-left") {
-        set_color(device, "left", &color);
+    if let Ok(color) = config::get("color-left") {
+        set_color(&device, "left", &color);
     }
-    if let Ok(color) = config.get("color-middle") {
-        set_color(device, "middle", &color);
+    if let Ok(color) = config::get("color-middle") {
+        set_color(&device, "middle", &color);
     }
-    if let Ok(color) = config.get("color-right") {
-        set_color(device, "right", &color);
+    if let Ok(color) = config::get("color-right") {
+        set_color(&device, "right", &color);
     }
 }
 

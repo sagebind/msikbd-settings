@@ -1,8 +1,7 @@
 use color::Color;
-use config::Config;
+use config;
 use gtk;
 use gtk::prelude::*;
-use std::rc::Rc;
 
 
 pub fn main() {
@@ -11,7 +10,6 @@ pub fn main() {
         return;
     }
 
-    let config = Rc::new(Config::open());
     let builder = gtk::Builder::new_from_string(include_str!("gui.glade"));
 
     let window: gtk::Window = builder.get_object("window").unwrap();
@@ -23,57 +21,54 @@ pub fn main() {
     });
 
     {
-        let config = config.clone();
         let left_color: gtk::ColorButton = builder.get_object("left_color").unwrap();
 
-        if let Some(color) = config.get("color-left").ok().and_then(Color::from_hex) {
+        if let Some(color) = config::get("color-left").ok().and_then(Color::from_hex) {
             left_color.set_rgba(&color.into());
         }
 
         left_color.connect_color_set(move |color| {
             let color = Color::from(color.get_rgba()).to_hex();
-            config.set("color-left", &color);
+            config::set("color-left", &color);
         });
     }
 
     {
-        let config = config.clone();
         let center_color: gtk::ColorButton = builder.get_object("center_color").unwrap();
 
-        if let Some(color) = config.get("color-middle").ok().and_then(Color::from_hex) {
+        if let Some(color) = config::get("color-middle").ok().and_then(Color::from_hex) {
             center_color.set_rgba(&color.into());
         }
 
         center_color.connect_color_set(move |color| {
             let color = Color::from(color.get_rgba()).to_hex();
-            config.set("color-middle", &color);
+            config::set("color-middle", &color);
         });
     }
 
     {
-        let config = config.clone();
         let right_color: gtk::ColorButton = builder.get_object("right_color").unwrap();
 
-        if let Some(color) = config.get("color-right").ok().and_then(Color::from_hex) {
+        if let Some(color) = config::get("color-right").ok().and_then(Color::from_hex) {
             right_color.set_rgba(&color.into());
         }
 
         right_color.connect_color_set(move |color| {
             let color = Color::from(color.get_rgba()).to_hex();
-            config.set("color-right", &color);
+            config::set("color-right", &color);
         });
     }
 
     {
         let mode_select: gtk::ComboBoxText = builder.get_object("mode_select").unwrap();
 
-        if let Ok(mode) = config.get("mode") {
+        if let Ok(mode) = config::get("mode") {
             mode_select.set_active_id(Some(mode.as_str()));
         }
 
         mode_select.connect_changed(move |select| {
             if let Some(mode) = select.get_active_id() {
-                config.set("mode", &mode);
+                config::set("mode", &mode);
             }
         });
     }
