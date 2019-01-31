@@ -11,7 +11,7 @@ gdk = "*"
 hidapi = "0.4.1"
 inotify = "0.5.0"
 lazy_static = "1.0"
-log = "0.3"
+log = "0.4"
 simple-signal = "1.1"
 
 [dependencies.gtk]
