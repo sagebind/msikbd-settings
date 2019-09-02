@@ -5,7 +5,7 @@ authors = ["Stephen M. Coakley <me@stephencoakley.com>"]
 
 [dependencies]
 clap = "2.27"
-dbus = "0.6"
+dbus = "0.7"
 env_logger = "0.6"
 gdk = "*"
 hidapi = "1.0.0"
